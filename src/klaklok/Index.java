@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -18,11 +19,76 @@ import javax.swing.Timer;
  * @author User
  */
 public class Index extends javax.swing.JFrame {
-
-    
+    // Add new variables for multiple players
+    private ArrayList<Player> players;
+    private int currentPlayerIndex;
+        // Player class to store player information
+    private class Player {
+        String name;
+        int money;
+        
+        public Player(String name, int initialMoney) {
+            this.name = name;
+            this.money = initialMoney;
+        }
+    }
     public Index() {
         initComponents();
         this.setLocationRelativeTo(null); 
+                initializePlayers(); // Call method to set up players
+
+    }
+    
+        private void initializePlayers() {
+        players = new ArrayList<>();
+        
+        // Ask for number of players
+        String input = JOptionPane.showInputDialog(this, 
+            "Enter number of players (1-4):", 
+            "Player Setup", 
+            JOptionPane.QUESTION_MESSAGE);
+            
+        try {
+            int numPlayers = Integer.parseInt(input);
+            if (numPlayers < 1 || numPlayers > 4) {
+                JOptionPane.showMessageDialog(this, 
+                    "Invalid number of players. Setting to 1 player.",
+                    "Invalid Input",
+                    JOptionPane.WARNING_MESSAGE);
+                numPlayers = 1;
+            }
+            
+            // Get each player's name and set up their initial money
+            for (int i = 0; i < numPlayers; i++) {
+                String playerName = JOptionPane.showInputDialog(this,
+                    "Enter name for Player " + (i + 1) + ":",
+                    "Player Setup",
+                    JOptionPane.QUESTION_MESSAGE);
+                    
+                if (playerName == null || playerName.trim().isEmpty()) {
+                    playerName = "Player " + (i + 1);
+                }
+                
+                players.add(new Player(playerName, MainMoney));
+            }
+            
+            currentPlayerIndex = 0;
+            updatePlayerDisplay();
+            
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                "Invalid input. Setting to 1 player.",
+                "Invalid Input",
+                JOptionPane.WARNING_MESSAGE);
+            players.add(new Player("Player 1", MainMoney));
+        }
+    }
+    
+    // Add method to update display for current player
+    private void updatePlayerDisplay() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        label2.setText(currentPlayer.name + "'s Money");
+        txtMoney.setText(String.valueOf(currentPlayer.money));
     }
 //random
     private String[] image= {"image/1.jpg", "image/2.jpg", "image/3.jpg", "image/4.jpg", "image/5.jpg", "image/6.jpg"};
@@ -215,10 +281,29 @@ public class Index extends javax.swing.JFrame {
         else{
             lWin.setText("You Receive : " + money);
         }
+                Player currentPlayer = players.get(currentPlayerIndex);
+        currentPlayer.money = Integer.parseInt(txtMoney.getText());
         
+        // Add display of player name in win message
+        if(money == 0) {
+            lWin.setText(currentPlayer.name + " Don't Receive Money!");
+        } else {
+            lWin.setText(currentPlayer.name + " Receive : " + money);
+        }
     }
     
-    
+        private boolean checkGameEnd() {
+        for (Player player : players) {
+            if (player.money <= 0) {
+                JOptionPane.showMessageDialog(this,
+                    player.name + " has run out of money! Game Over!",
+                    "Game Over",
+                    JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            }
+        }
+        return false;
+    }
     
     private String extractNumbers(String input) {
         return input.replaceAll("[^0-9]", "");
@@ -257,6 +342,7 @@ public class Index extends javax.swing.JFrame {
         txtMoney = new java.awt.TextField();
         btnExit = new javax.swing.JButton();
         label2 = new java.awt.Label();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -543,6 +629,13 @@ public class Index extends javax.swing.JFrame {
         label2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         label2.setText("Your Money");
 
+        jButton1.setText("Next Player");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -568,33 +661,42 @@ public class Index extends javax.swing.JFrame {
                             .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lWin, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lWin, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(74, 74, 74)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(82, 82, 82)
-                .addComponent(lWin, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
+                        .addComponent(lWin, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtMoney, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(61, 61, 61)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnStart)
+                            .addComponent(btnStop))
+                        .addGap(33, 33, 33)
+                        .addComponent(btnPlayAgain)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMoney, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(61, 61, 61)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnStart)
-                    .addComponent(btnStop))
-                .addGap(33, 33, 33)
-                .addComponent(btnPlayAgain)
-                .addGap(168, 168, 168)
-                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(104, 104, 104))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(104, 104, 104))))
         );
 
         pack();
@@ -602,6 +704,32 @@ public class Index extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
+              // Save current player's money
+        players.get(currentPlayerIndex).money = Integer.parseInt(txtMoney.getText());
+        
+        // Switch to next player
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        updatePlayerDisplay();
+        
+        // Reset the game state
+        btnStart.setEnabled(true);
+        btnPlayAgain.setEnabled(false);
+        btnStop.setEnabled(false);
+        txt1.setText("0");
+        txt2.setText("0");
+        txt3.setText("0");
+        txt4.setText("0");
+        txt5.setText("0");
+        txt6.setText("0");
+        Khla = Klouk = Morn = Bongkong = Kdam = Trey = 0;
+        
+        lKhla.setEnabled(true);
+        lKlouk.setEnabled(true);
+        lMorn.setEnabled(true);
+        lBongkong.setEnabled(true);
+        lKdam.setEnabled(true);
+        lTrey.setEnabled(true);
+        
         timer.start();
         
         btnStop.setEnabled(true);
@@ -631,13 +759,26 @@ public class Index extends javax.swing.JFrame {
        Calculate();
        MainMoney = Integer.parseInt(txtMoney.getText());
        
-       
+           jButton1.setEnabled(true);
+
        
     }//GEN-LAST:event_btnStopActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_btnExitActionPerformed
+        StringBuilder results = new StringBuilder("Final Results:\n\n");
+        for (Player player : players) {
+            results.append(player.name)
+                  .append(": $")
+                  .append(player.money)
+                  .append("\n");
+        }
+        
+        JOptionPane.showMessageDialog(this,
+            results.toString(),
+            "Game Results",
+            JOptionPane.INFORMATION_MESSAGE);
+            
+        System.exit(0);    }//GEN-LAST:event_btnExitActionPerformed
 
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -933,6 +1074,78 @@ public class Index extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnClear6ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+            // Save current player's money
+    players.get(currentPlayerIndex).money = Integer.parseInt(txtMoney.getText());
+    
+    // Switch to next player
+    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+    updatePlayerDisplay();
+    
+    // Reset the game state
+    txt1.setText("0");
+    txt2.setText("0");
+    txt3.setText("0");
+    txt4.setText("0");
+    txt5.setText("0");
+    txt6.setText("0");
+    Khla = Klouk = Morn = Bongkong = Kdam = Trey = 0;
+    lWin.setText("");
+    
+    // Enable betting areas
+    lKhla.setEnabled(true);
+    lKlouk.setEnabled(true);
+    lMorn.setEnabled(true);
+    lBongkong.setEnabled(true);
+    lKdam.setEnabled(true);
+    lTrey.setEnabled(true);
+    
+    // Reset buttons state
+    btnStart.setEnabled(true);
+    jButton1.setEnabled(false);
+    btnPlayAgain.setEnabled(false);
+    btnStop.setEnabled(false);
+    
+    // Reset clear buttons
+    btnClear1.setEnabled(false);
+    btnClear2.setEnabled(false);
+    btnClear3.setEnabled(false);
+    btnClear4.setEnabled(false);
+    btnClear5.setEnabled(false);
+    btnClear6.setEnabled(false);
+    
+    // Check if any player has lost
+    if (checkGameEnd()) {
+        StringBuilder results = new StringBuilder("Game Over!\n\nFinal Results:\n");
+        Player winner = players.get(0);
+        
+        for (Player player : players) {
+            results.append(player.name)
+                  .append(": $")
+                  .append(player.money)
+                  .append("\n");
+            if (player.money > winner.money) {
+                winner = player;
+            }
+        }
+        
+        results.append("\nWinner: ").append(winner.name)
+               .append(" with $").append(winner.money);
+        
+        JOptionPane.showMessageDialog(this,
+            results.toString(),
+            "Game Over",
+            JOptionPane.INFORMATION_MESSAGE);
+            
+        // Disable all game controls
+        btnStart.setEnabled(false);
+        btnStop.setEnabled(false);
+        btnPlayAgain.setEnabled(false);
+        jButton1.setEnabled(false);
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     
     public static void main(String args[]) {
         
@@ -943,6 +1156,7 @@ public class Index extends javax.swing.JFrame {
             }
         });
     }
+    private javax.swing.JButton btnNextPlayer;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear1;
@@ -955,6 +1169,7 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JButton btnPlayAgain;
     private javax.swing.JButton btnStart;
     private javax.swing.JButton btnStop;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lBongkong;
