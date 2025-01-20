@@ -14,341 +14,433 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-/**  
+/**
  *
  * @author User
  */
 public class Index extends javax.swing.JFrame {
+
     // Add new variables for multiple players
     private ArrayList<Player> players;
     private int currentPlayerIndex;
-        // Player class to store player information
-private class Player {
-    String name;
-    int money;
-    // Add fields to store betting values
-    int khla;
-    int klouk;
-    int morn;
-    int bongkong;
-    int kdam;
-    int trey;
-    
-    public Player(String name, int initialMoney) {
-        this.name = name;
-        this.money = initialMoney;
-        // Initialize betting values to 0
-        this.khla = 0;
-        this.klouk = 0;
-        this.morn = 0;
-        this.bongkong = 0;
-        this.kdam = 0;
-        this.trey = 0;
+    // Player class to store player information
+
+    private class Player {
+
+        String name;
+        int money;
+        // Add fields to store betting values
+        int khla;
+        int klouk;
+        int morn;
+        int bongkong;
+        int kdam;
+        int trey;
+
+        public Player(String name, int initialMoney) {
+            this.name = name;
+            this.money = initialMoney;
+            // Initialize betting values to 0
+            this.khla = 0;
+            this.klouk = 0;
+            this.morn = 0;
+            this.bongkong = 0;
+            this.kdam = 0;
+            this.trey = 0;
+        }
     }
-}
+
     public Index() {
         initComponents();
-        this.setLocationRelativeTo(null); 
+        this.setLocationRelativeTo(null);
         initializePlayers(); // Call method to set up players
 
     }
-    
-        private void initializePlayers() {
+
+    private void initializePlayers() {
         players = new ArrayList<>();
-            updateNavigationButtons();
+        updateNavigationButtons();
 
         // Ask for number of players
-        String input = JOptionPane.showInputDialog(this, 
-            "Enter number of players (1-10):", 
-            "Player Setup", 
-            JOptionPane.QUESTION_MESSAGE);
-            
+        String input = JOptionPane.showInputDialog(this,
+                "Enter number of players (1-10):",
+                "Player Setup",
+                JOptionPane.QUESTION_MESSAGE);
+
         try {
             int numPlayers = Integer.parseInt(input);
             if (numPlayers < 1 || numPlayers > 10) {
-                JOptionPane.showMessageDialog(this, 
-                    "Invalid number of players. Setting to 1 player.",
-                    "Invalid Input",
-                    JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Invalid number of players. Setting to 1 player.",
+                        "Invalid Input",
+                        JOptionPane.WARNING_MESSAGE);
                 numPlayers = 1;
             }
-            
+
             // Get each player's name and set up their initial money
             for (int i = 0; i < numPlayers; i++) {
                 String playerName = JOptionPane.showInputDialog(this,
-                    "Enter name for Player " + (i + 1) + ":",
-                    "Player Setup",
-                    JOptionPane.QUESTION_MESSAGE);
-                    
+                        "Enter name for Player " + (i + 1) + ":",
+                        "Player Setup",
+                        JOptionPane.QUESTION_MESSAGE);
+
                 if (playerName == null || playerName.trim().isEmpty()) {
                     playerName = "Player " + (i + 1);
                 }
-                
+
                 players.add(new Player(playerName, MainMoney));
             }
-            
+
             currentPlayerIndex = 0;
             updatePlayerDisplay();
-            
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
-                "Invalid input. Setting to 1 player.",
-                "Invalid Input",
-                JOptionPane.WARNING_MESSAGE);
+                    "Invalid input. Setting to 1 player.",
+                    "Invalid Input",
+                    JOptionPane.WARNING_MESSAGE);
             players.add(new Player("Player 1", MainMoney));
         }
     }
-    
-    // Add method to update display for current player
-private void updatePlayerDisplay() {
-    Player currentPlayer = players.get(currentPlayerIndex);
-    label2.setText(currentPlayer.name + "'s Money");
-    txtMoney.setText(String.valueOf(currentPlayer.money));
-    
-    // Update betting text fields
-    txt1.setText(String.valueOf(currentPlayer.khla));
-    txt2.setText(String.valueOf(currentPlayer.klouk));
-    txt3.setText(String.valueOf(currentPlayer.morn));
-    txt4.setText(String.valueOf(currentPlayer.bongkong));
-    txt5.setText(String.valueOf(currentPlayer.kdam));
-    txt6.setText(String.valueOf(currentPlayer.trey));
-    
-    // Update global betting variables to match current player
-    Khla = currentPlayer.khla;
-    Klouk = currentPlayer.klouk;
-    Morn = currentPlayer.morn;
-    Bongkong = currentPlayer.bongkong;
-    Kdam = currentPlayer.kdam;
-    Trey = currentPlayer.trey;
-    
-    // Enable/disable clear buttons based on bet values
-    btnClear1.setEnabled(currentPlayer.khla > 0);
-    btnClear2.setEnabled(currentPlayer.klouk > 0);
-    btnClear3.setEnabled(currentPlayer.morn > 0);
-    btnClear4.setEnabled(currentPlayer.bongkong > 0);
-    btnClear5.setEnabled(currentPlayer.kdam > 0);
-    btnClear6.setEnabled(currentPlayer.trey > 0);
-}
 
+    // Add method to update display for current player
+    private void updatePlayerDisplay() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        label2.setText(currentPlayer.name + "'s Money");
+        txtMoney.setText(String.valueOf(currentPlayer.money));
+
+        // Update betting text fields
+        txt1.setText(String.valueOf(currentPlayer.khla));
+        txt2.setText(String.valueOf(currentPlayer.klouk));
+        txt3.setText(String.valueOf(currentPlayer.morn));
+        txt4.setText(String.valueOf(currentPlayer.bongkong));
+        txt5.setText(String.valueOf(currentPlayer.kdam));
+        txt6.setText(String.valueOf(currentPlayer.trey));
+
+        // Update global betting variables to match current player
+        Khla = currentPlayer.khla;
+        Klouk = currentPlayer.klouk;
+        Morn = currentPlayer.morn;
+        Bongkong = currentPlayer.bongkong;
+        Kdam = currentPlayer.kdam;
+        Trey = currentPlayer.trey;
+
+        // Enable/disable clear buttons based on bet values
+        btnClear1.setEnabled(currentPlayer.khla > 0);
+        btnClear2.setEnabled(currentPlayer.klouk > 0);
+        btnClear3.setEnabled(currentPlayer.morn > 0);
+        btnClear4.setEnabled(currentPlayer.bongkong > 0);
+        btnClear5.setEnabled(currentPlayer.kdam > 0);
+        btnClear6.setEnabled(currentPlayer.trey > 0);
+    }
 
 //random
-    private String[] image= {"image/1.jpg", "image/2.jpg", "image/3.jpg", "image/4.jpg", "image/5.jpg", "image/6.jpg"};
+    private String[] image = {"image/1.jpg", "image/2.jpg", "image/3.jpg", "image/4.jpg", "image/5.jpg", "image/6.jpg"};
     Random rand = new Random();
-    
+
     //set time for randoming
-    Timer timer = new Timer(10, new ActionListener(){
-            
-            public void actionPerformed(ActionEvent e){
-                int index1 = rand.nextInt(6);
-                URL imageUrl1 = this.getClass().getResource(image[index1]);
-                Image im1 = new ImageIcon(imageUrl1).getImage();
-                ImageIcon icon1 = new ImageIcon(im1);
-                lResult1.setIcon(icon1);
-                lResult1.setText(image[index1]);
-                
-                int index2 = rand.nextInt(6);
-                URL imageUrl2 = this.getClass().getResource(image[index2]);
-                Image im2 = new ImageIcon(imageUrl2).getImage();
-                ImageIcon icon2 = new ImageIcon(im2);
-                lResult2.setIcon(icon2);
-                lResult2.setText(image[index2]);
-                
-                int index3 = rand.nextInt(6);
-                URL imageUrl3 = this.getClass().getResource(image[index3]);
-                Image im3 = new ImageIcon(imageUrl3).getImage();
-                ImageIcon icon3 = new ImageIcon(im3);
-                lResult3.setIcon(icon3);
-                lResult3.setText(image[index3]);
-            }
+    Timer timer = new Timer(10, new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+            int index1 = rand.nextInt(6);
+            URL imageUrl1 = this.getClass().getResource(image[index1]);
+            Image im1 = new ImageIcon(imageUrl1).getImage();
+            ImageIcon icon1 = new ImageIcon(im1);
+            lResult1.setIcon(icon1);
+            lResult1.setText(image[index1]);
+
+            int index2 = rand.nextInt(6);
+            URL imageUrl2 = this.getClass().getResource(image[index2]);
+            Image im2 = new ImageIcon(imageUrl2).getImage();
+            ImageIcon icon2 = new ImageIcon(im2);
+            lResult2.setIcon(icon2);
+            lResult2.setText(image[index2]);
+
+            int index3 = rand.nextInt(6);
+            URL imageUrl3 = this.getClass().getResource(image[index3]);
+            Image im3 = new ImageIcon(imageUrl3).getImage();
+            ImageIcon icon3 = new ImageIcon(im3);
+            lResult3.setIcon(icon3);
+            lResult3.setText(image[index3]);
+        }
     });
-    
-    
+
     public int Khla = 0;
-    public int Klouk = 0 ;
-    public int Morn = 0 ;
+    public int Klouk = 0;
+    public int Morn = 0;
     public int Bongkong = 0;
     public int Kdam = 0;
     public int Trey = 0;
     public int Money;
     public int MainMoney = 5000;
-    
-    public void Calculate(){
-        int khla = Integer.parseInt(txt1.getText());
-        int klouk = Integer.parseInt(txt2.getText());
-        int morn = Integer.parseInt(txt3.getText());
-        int bongkong = Integer.parseInt(txt4.getText());
-        int kdam = Integer.parseInt(txt5.getText());
-        int trey = Integer.parseInt(txt6.getText());
-        //int payMoney = khla + klouk + morn + bongkong + kdam + trey;
-        int money = 0;
-        int totalMoney = Integer.parseInt(txtMoney.getText()) + money;
-        
-        int result1 = Integer.parseInt(extractNumbers(lResult1.getText()));
-        int result2 = Integer.parseInt(extractNumbers(lResult2.getText()));
-        int result3 = Integer.parseInt(extractNumbers(lResult3.getText()));
-        
-        if(khla > 0){
-            if(result1 == 1 && result2 == 1 && result3 == 1){
-               
-                money += (khla * 3);
-                totalMoney += khla + money;
+
+//    public void Calculate() {
+//        int khla = Integer.parseInt(txt1.getText());
+//        int klouk = Integer.parseInt(txt2.getText());
+//        int morn = Integer.parseInt(txt3.getText());
+//        int bongkong = Integer.parseInt(txt4.getText());
+//        int kdam = Integer.parseInt(txt5.getText());
+//        int trey = Integer.parseInt(txt6.getText());
+//        //int payMoney = khla + klouk + morn + bongkong + kdam + trey;
+//        int money = 0;
+//        int totalMoney = Integer.parseInt(txtMoney.getText()) + money;
+//
+//        int result1 = Integer.parseInt(extractNumbers(lResult1.getText()));
+//        int result2 = Integer.parseInt(extractNumbers(lResult2.getText()));
+//        int result3 = Integer.parseInt(extractNumbers(lResult3.getText()));
+//
+//        if (khla > 0) {
+//            if (result1 == 1 && result2 == 1 && result3 == 1) {
+//
+//                money += (khla * 3);
+//                totalMoney += khla + money;
+//            } else if ((result1 == 1 && result2 == 1) || (result1 == 1 && result3 == 1) || (result2 == 1 && result3 == 1)) {
+//
+//                money += (khla * 2);
+//                totalMoney += khla + money;
+//            } else if (result1 == 1 || result2 == 1 || result3 == 1) {
+//
+//                money += khla;
+//                totalMoney += khla + money;
+//            } else {
+//                khla = 0;
+//                money += khla;
+//            }
+//        }
+//        if (klouk > 0) {
+//            if (result1 == 2 && result2 == 2 && result3 == 2) {
+//
+//                money += (klouk * 3);
+//                totalMoney += klouk + money;
+//            } else if ((result1 == 2 && result2 == 2) || (result1 == 2 && result3 == 2) || (result2 == 2 && result3 == 2)) {
+//
+//                money += (klouk * 2);
+//                totalMoney += klouk + money;
+//            } else if (result1 == 2 || result2 == 2 || result3 == 2) {
+//
+//                money += klouk;
+//                totalMoney += klouk + money;
+//            } else {
+//                klouk = 0;
+//                money += klouk;
+//            }
+//        }
+//        if (morn > 0) {
+//            if (result1 == 3 && result2 == 3 && result3 == 3) {
+//
+//                money += (morn * 3);
+//                totalMoney += morn + money;
+//            } else if ((result1 == 3 && result2 == 3) || (result1 == 3 && result3 == 3) || (result2 == 3 && result3 == 3)) {
+//
+//                money += (morn * 2);
+//                totalMoney += morn + money;
+//            } else if (result1 == 3 || result2 == 3 || result3 == 3) {
+//
+//                money += morn;
+//                totalMoney += morn + money;
+//            } else {
+//                morn = 0;
+//                money += morn;
+//            }
+//        }
+//        if (bongkong > 0) {
+//            if (result1 == 4 && result2 == 4 && result3 == 4) {
+//
+//                money += (bongkong * 3);
+//                totalMoney += bongkong + money;
+//            } else if ((result1 == 4 && result2 == 4) || (result1 == 4 && result3 == 4) || (result2 == 4 && result3 == 4)) {
+//
+//                money += (bongkong * 2);
+//                totalMoney += bongkong + money;
+//            } else if (result1 == 4 || result2 == 4 || result3 == 4) {
+//
+//                money += bongkong;
+//                totalMoney += bongkong + money;
+//            } else {
+//                bongkong = 0;
+//                money += bongkong;
+//            }
+//        }
+//        if (kdam > 0) {
+//            if (result1 == 5 && result2 == 5 && result3 == 5) {
+//
+//                money += (kdam * 3);
+//                totalMoney += kdam + money;
+//            } else if ((result1 == 5 && result2 == 5) || (result1 == 5 && result3 == 5) || (result2 == 5 && result3 == 5)) {
+//
+//                money += (kdam * 2);
+//                totalMoney += kdam + money;
+//            } else if (result1 == 5 || result2 == 5 || result3 == 5) {
+//
+//                money += kdam;
+//                totalMoney += kdam + money;
+//            } else {
+//                kdam = 0;
+//                money += kdam;
+//            }
+//        }
+//        if (trey > 0) {
+//            if (result1 == 6 && result2 == 6 && result3 == 6) {
+//
+//                money += (trey * 3);
+//                totalMoney += trey + money;
+//            } else if ((result1 == 6 && result2 == 6) || (result1 == 6 && result3 == 6) || (result2 == 6 && result3 == 6)) {
+//
+//                money += (trey * 2);
+//                totalMoney += trey + money;
+//            } else if (result1 == 6 || result2 == 6 || result3 == 6) {
+//
+//                money += trey;
+//                totalMoney += trey + money;
+//            } else {
+//                trey = 0;
+//                money += trey;
+//            }
+//        }
+//
+//        txtMoney.setText(String.valueOf(totalMoney));
+//
+//        if (money == 0) {
+//            lWin.setText("You Don't Receive Money!");
+//        } else {
+//            lWin.setText("You Receive : " + money);
+//        }
+//        Player currentPlayer = players.get(currentPlayerIndex);
+//        currentPlayer.money = Integer.parseInt(txtMoney.getText());
+//
+//        // Add display of player name in win message
+//        if (money == 0) {
+//            lWin.setText(currentPlayer.name + " Don't Receive Money!");
+//        } else {
+//            lWin.setText(currentPlayer.name + " Receive : " + money);
+//        }
+//    }
+    public void Calculate() {
+        StringBuilder resultSummary = new StringBuilder();
+        int[] results = new int[3]; // To store the results of the three dice rolls
+
+        // Extract the results of the dice rolls
+        results[0] = Integer.parseInt(extractNumbers(lResult1.getText()));
+        results[1] = Integer.parseInt(extractNumbers(lResult2.getText()));
+        results[2] = Integer.parseInt(extractNumbers(lResult3.getText()));
+
+        // Add the result of the dice rolls to the summary
+        resultSummary.append("Result: (" + getBetName(results[0]) + ", " + getBetName(results[1]) + ", " + getBetName(results[2]) + ")\n\n");
+
+        // Iterate through all players and calculate their results
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            int totalWin = 0;
+            int totalLose = 0;
+
+            // Calculate wins and losses for each bet
+            if (player.khla > 0) {
+                if (containsResult(results, 1)) {
+                    totalWin += player.khla * 2; // Win = bet amount * 2 (original bet + win)
+                } else {
+                    totalLose += player.khla; // Lose the bet (no money deducted, just no win)
+                }
             }
-            else if ((result1 == 1 && result2 == 1) || (result1 == 1 && result3 == 1) || (result2 == 1 && result3 == 1)){
-                
-                money += (khla * 2);
-                totalMoney += khla + money;
+            if (player.klouk > 0) {
+                if (containsResult(results, 2)) {
+                    totalWin += player.klouk * 2; // Win = bet amount * 2
+                } else {
+                    totalLose += player.klouk; // Lose the bet (no money deducted, just no win)
+                }
             }
-            else if (result1 == 1 || result2 ==1 || result3 == 1){
-                
-                money += khla;
-                totalMoney += khla + money;
+            if (player.morn > 0) {
+                if (containsResult(results, 3)) {
+                    totalWin += player.morn * 2; // Win = bet amount * 2
+                } else {
+                    totalLose += player.morn; // Lose the bet (no money deducted, just no win)
+                }
             }
-            else{
-                khla = 0;
-                money += khla;
+            if (player.bongkong > 0) {
+                if (containsResult(results, 4)) {
+                    totalWin += player.bongkong * 2; // Win = bet amount * 2
+                } else {
+                    totalLose += player.bongkong; // Lose the bet (no money deducted, just no win)
+                }
             }
+            if (player.kdam > 0) {
+                if (containsResult(results, 5)) {
+                    totalWin += player.kdam * 2; // Win = bet amount * 2
+                } else {
+                    totalLose += player.kdam; // Lose the bet (no money deducted, just no win)
+                }
+            }
+            if (player.trey > 0) {
+                if (containsResult(results, 6)) {
+                    totalWin += player.trey * 2; // Win = bet amount * 2
+                } else {
+                    totalLose += player.trey; // Lose the bet (no money deducted, just no win)
+                }
+            }
+
+            // Update player's money (only add wins, no deduction for losses)
+            player.money += totalWin;
+
+            // Add player's result to the summary
+            resultSummary.append("Player " + (i + 1) + " (" + player.name + "):\n");
+            resultSummary.append("  Win: " + totalWin + "\n");
+            resultSummary.append("  Lose: " + totalLose + "\n");
+            resultSummary.append("  Total Money: " + player.money + "\n\n");
         }
-        if(klouk > 0){
-            if(result1 == 2 && result2 == 2 && result3 == 2){
-                
-                money += (klouk * 3);
-                totalMoney += klouk + money;
-            }
-            else if ((result1 == 2 && result2 == 2) || (result1 == 2 && result3 == 2) || (result2 == 2 && result3 == 2)){
-                
-                money += (klouk * 2);
-                totalMoney += klouk + money;
-            }
-            else if (result1 == 2 || result2 == 2 || result3 == 2){
-                
-                money += klouk;
-                totalMoney += klouk + money;
-            }
-            else{
-                klouk = 0;
-                money += klouk;
-            }
-        }
-        if(morn > 0){
-            if(result1 == 3 && result2 == 3 && result3 == 3){
-                
-                money += (morn * 3);
-                totalMoney += morn + money;
-            }
-            else if ((result1 == 3 && result2 == 3) || (result1 == 3 && result3 == 3) || (result2 == 3 && result3 == 3)){
-                
-                money += (morn * 2);
-                totalMoney += morn + money;
-            }
-            else if (result1 == 3 || result2 == 3 || result3 == 3){
-                
-                money += morn;
-                totalMoney += morn + money;
-            }
-            else{
-                morn = 0;
-                money += morn;
-            }
-        }
-        if(bongkong > 0){
-            if(result1 == 4 && result2 == 4 && result3 == 4){
-                
-                money += (bongkong * 3);
-                totalMoney += bongkong + money;
-            }
-            else if ((result1 == 4 && result2 == 4) || (result1 == 4 && result3 == 4) || (result2 == 4 && result3 == 4)){
-                
-                money += (bongkong * 2);
-                totalMoney += bongkong + money;
-            }
-            else if (result1 == 4 || result2 == 4 || result3 == 4){
-                
-                money += bongkong;
-                totalMoney += bongkong + money;
-            }
-            else{
-                bongkong = 0;
-                money += bongkong;
-            }
-        }
-        if(kdam > 0){
-            if(result1 == 5 && result2 == 5 && result3 == 5){
-                
-                money += (kdam * 3);
-                totalMoney += kdam + money;
-            }
-            else if ((result1 == 5 && result2 == 5) || (result1 == 5 && result3 == 5) || (result2 == 5 && result3 == 5)){
-                
-                money += (kdam * 2);
-                totalMoney += kdam + money;
-            }
-            else if (result1 == 5 || result2 == 5 || result3 == 5){
-                
-                money += kdam;
-                totalMoney += kdam + money;
-            }
-            else{
-                kdam = 0;
-                money += kdam;
-            }
-        }
-        if(trey > 0){
-            if(result1 == 6 && result2 == 6 && result3 == 6){
-                
-                money += (trey * 3);
-                totalMoney += trey + money;
-            }
-            else if ((result1 == 6 && result2 == 6) || (result1 == 6 && result3 == 6) || (result2 == 6 && result3 == 6)){
-                
-                money += (trey * 2);
-                totalMoney += trey + money;
-            }
-            else if (result1 == 6 || result2 == 6 || result3 == 6){
-                
-                money += trey;
-                totalMoney += trey + money;
-            }
-            else{
-                trey = 0;
-                money += trey;
-            }
-        }
-        
-        txtMoney.setText(String.valueOf(totalMoney));
-        
-        if(money == 0){
-            lWin.setText("You Don't Receive Money!");
-        }
-        else{
-            lWin.setText("You Receive : " + money);
-        }
-                Player currentPlayer = players.get(currentPlayerIndex);
-        currentPlayer.money = Integer.parseInt(txtMoney.getText());
-        
-        // Add display of player name in win message
-        if(money == 0) {
-            lWin.setText(currentPlayer.name + " Don't Receive Money!");
-        } else {
-            lWin.setText(currentPlayer.name + " Receive : " + money);
-        }
+
+        // Display the summary in a popup
+        JOptionPane.showMessageDialog(this, resultSummary.toString(), "Game Results", JOptionPane.INFORMATION_MESSAGE);
+
+        // Update the display for the current player
+        updatePlayerDisplay();
     }
-    
-        private boolean checkGameEnd() {
-        for (Player player : players) {
-            if (player.money <= 0) {
-                JOptionPane.showMessageDialog(this,
-                    player.name + " has run out of money! Game Over!",
-                    "Game Over",
-                    JOptionPane.INFORMATION_MESSAGE);
+
+// Helper method to check if a specific result exists in the dice rolls
+    private boolean containsResult(int[] results, int target) {
+        for (int result : results) {
+            if (result == target) {
                 return true;
             }
         }
         return false;
     }
-    
+
+// Helper method to get the name of the bet based on its number
+    private String getBetName(int betNumber) {
+        switch (betNumber) {
+            case 1:
+                return "Khla";
+            case 2:
+                return "Klouk";
+            case 3:
+                return "Morn";
+            case 4:
+                return "Bongkong";
+            case 5:
+                return "Kdam";
+            case 6:
+                return "Trey";
+            default:
+                return "Unknown";
+        }
+    }
+
+    private boolean checkGameEnd() {
+        for (Player player : players) {
+            if (player.money <= 0) {
+                JOptionPane.showMessageDialog(this,
+                        player.name + " has run out of money! Game Over!",
+                        "Game Over",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            }
+        }
+        return false;
+    }
+
     private String extractNumbers(String input) {
         return input.replaceAll("[^0-9]", "");
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -761,13 +853,22 @@ private void updatePlayerDisplay() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-              // Save current player's money
-        players.get(currentPlayerIndex).money = Integer.parseInt(txtMoney.getText());
-        
+        // Save current player's money
+//        players.get(currentPlayerIndex).money = Integer.parseInt(txtMoney.getText());
+        Player currentPlayer = players.get(currentPlayerIndex);
+        currentPlayer.money = Integer.parseInt(txtMoney.getText());
+
+        currentPlayer.khla = Khla;
+        currentPlayer.klouk = Klouk;
+        currentPlayer.morn = Morn;
+        currentPlayer.bongkong = Bongkong;
+        currentPlayer.kdam = Kdam;
+        currentPlayer.trey = Trey;
+
         // Switch to next player
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
         updatePlayerDisplay();
-        
+
         // Reset the game state
         btnStart.setEnabled(true);
         btnPlayAgain.setEnabled(false);
@@ -779,65 +880,65 @@ private void updatePlayerDisplay() {
         txt5.setText("0");
         txt6.setText("0");
         Khla = Klouk = Morn = Bongkong = Kdam = Trey = 0;
-        
+
         lKhla.setEnabled(true);
         lKlouk.setEnabled(true);
         lMorn.setEnabled(true);
         lBongkong.setEnabled(true);
         lKdam.setEnabled(true);
         lTrey.setEnabled(true);
-        
+
         timer.start();
-        
+
         btnStop.setEnabled(true);
-        
+
         btnClear1.setEnabled(false);
         btnClear2.setEnabled(false);
         btnClear3.setEnabled(false);
         btnClear4.setEnabled(false);
         btnClear5.setEnabled(false);
         btnClear6.setEnabled(false);
-        
+
         lKhla.setEnabled(false);
         lKlouk.setEnabled(false);
         lMorn.setEnabled(false);
         lBongkong.setEnabled(false);
         lKdam.setEnabled(false);
         lTrey.setEnabled(false);
-        
-        
+
+
     }//GEN-LAST:event_btnStartActionPerformed
 
     private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopActionPerformed
-       timer.stop();
-       btnPlayAgain.setEnabled(true);
-       btnStart.setEnabled(false);
-       btnStop.setEnabled(false);
-       Calculate();
-       MainMoney = Integer.parseInt(txtMoney.getText());
-       
-           buttonNext.setEnabled(true);
+        timer.stop();
+        btnPlayAgain.setEnabled(true);
+        btnStart.setEnabled(false);
+        btnStop.setEnabled(false);
+        Calculate();
+        MainMoney = Integer.parseInt(txtMoney.getText());
 
-       
+        buttonNext.setEnabled(true);
+
+
     }//GEN-LAST:event_btnStopActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         StringBuilder results = new StringBuilder("Final Results:\n\n");
         for (Player player : players) {
             results.append(player.name)
-                  .append(": $")
-                  .append(player.money)
-                  .append("\n");
+                    .append(": $")
+                    .append(player.money)
+                    .append("\n");
         }
-        
+
         JOptionPane.showMessageDialog(this,
-            results.toString(),
-            "Game Results",
-            JOptionPane.INFORMATION_MESSAGE);
-            
+                results.toString(),
+                "Game Results",
+                JOptionPane.INFORMATION_MESSAGE);
+
         System.exit(0);    }//GEN-LAST:event_btnExitActionPerformed
 
-    
+
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         int khla = Integer.parseInt(txt1.getText());
         int klouk = Integer.parseInt(txt2.getText());
@@ -845,22 +946,22 @@ private void updatePlayerDisplay() {
         int bongkong = Integer.parseInt(txt4.getText());
         int kdam = Integer.parseInt(txt5.getText());
         int trey = Integer.parseInt(txt6.getText());
-        
-        
+
+
     }//GEN-LAST:event_formWindowOpened
 
     private void txt5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt5KeyTyped
-       char kla = evt.getKeyChar();
-       if(!Character.isDigit(kla)){
-           evt.consume();
-       }
+        char kla = evt.getKeyChar();
+        if (!Character.isDigit(kla)) {
+            evt.consume();
+        }
     }//GEN-LAST:event_txt5KeyTyped
 
     private void txt6KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt6KeyTyped
-       char kla = evt.getKeyChar();
-       if(!Character.isDigit(kla)){
-           evt.consume();
-       }
+        char kla = evt.getKeyChar();
+        if (!Character.isDigit(kla)) {
+            evt.consume();
+        }
     }//GEN-LAST:event_txt6KeyTyped
 
     private void btnPlayAgainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayAgainActionPerformed
@@ -874,7 +975,7 @@ private void updatePlayerDisplay() {
         txt5.setText("0");
         txt6.setText("0");
         Khla = Klouk = Morn = Bongkong = Kdam = Trey = 0;
-        
+
         lKhla.setEnabled(true);
         lKlouk.setEnabled(true);
         lMorn.setEnabled(true);
@@ -884,383 +985,381 @@ private void updatePlayerDisplay() {
     }//GEN-LAST:event_btnPlayAgainActionPerformed
 //
     private void lKhlaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lKhlaMouseClicked
-    Money = Integer.parseInt(txtMoney.getText());
-    Player currentPlayer = players.get(currentPlayerIndex);
-    try {
-        currentPlayer.khla += 500;
-        Money -= 500;
-        if(currentPlayer.khla <= Money || Money >= 0) {
-            txt1.setText(String.valueOf(currentPlayer.khla));
-            txtMoney.setText(String.valueOf(Money));
-            btnClear1.setEnabled(true);
-            Khla = currentPlayer.khla; // Update global variable
-        } else {
-            currentPlayer.khla -= 500;
-            Money = 0;
-            JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
+        Money = Integer.parseInt(txtMoney.getText());
+        Player currentPlayer = players.get(currentPlayerIndex);
+        try {
+            currentPlayer.khla += 500;
+            Money -= 500;
+            if (currentPlayer.khla <= Money || Money >= 0) {
+                txt1.setText(String.valueOf(currentPlayer.khla));
+                txtMoney.setText(String.valueOf(Money));
+                btnClear1.setEnabled(true);
+                Khla = currentPlayer.khla; // Update global variable
+            } else {
+                currentPlayer.khla -= 500;
+                Money = 0;
+                JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
+            }
+        } catch (Exception e) {
+            // Handle exception
         }
-    } catch(Exception e) {
-        // Handle exception
-    }
     }//GEN-LAST:event_lKhlaMouseClicked
 
     private void lKloukMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lKloukMouseClicked
         Money = Integer.parseInt(txtMoney.getText());
-        try{
+        try {
             Klouk += 500;
             Money -= 500;
-            if(Klouk <= Money || Money >= 0){
+            if (Klouk <= Money || Money >= 0) {
                 txt2.setText(String.valueOf(Klouk));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear2.setEnabled(true);
-            }
-            else{
+            } else {
                 Klouk -= 500;
                 Money = 0;
                 JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
             }
-        }
-        catch(Exception e){
-        
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_lKloukMouseClicked
 
     private void lMornMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lMornMouseClicked
         Money = Integer.parseInt(txtMoney.getText());
-        try{
+        try {
             Morn += 500;
             Money -= 500;
-            if(Morn <= Money || Money >= 0){
+            if (Morn <= Money || Money >= 0) {
                 txt3.setText(String.valueOf(Morn));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear3.setEnabled(true);
-            }
-            else{
+            } else {
                 Morn -= 500;
                 Money = 0;
                 JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
             }
-        }
-        catch(Exception e){
-        
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_lMornMouseClicked
 
     private void lBongkongMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lBongkongMouseClicked
         Money = Integer.parseInt(txtMoney.getText());
-        try{
+        try {
             Bongkong += 500;
             Money -= 500;
-            if(Bongkong <= Money || Money >= 0){
+            if (Bongkong <= Money || Money >= 0) {
                 txt4.setText(String.valueOf(Bongkong));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear4.setEnabled(true);
-            }
-            else{
+            } else {
                 Bongkong -= 500;
                 Money = 0;
                 JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
             }
-        }
-        catch(Exception e){
-        
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_lBongkongMouseClicked
 
     private void lKdamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lKdamMouseClicked
         Money = Integer.parseInt(txtMoney.getText());
-        try{
+        try {
             Kdam += 500;
             Money -= 500;
-            if(Kdam <= Money || Money >= 0){
+            if (Kdam <= Money || Money >= 0) {
                 txt5.setText(String.valueOf(Kdam));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear5.setEnabled(true);
-            }
-            else{
+            } else {
                 Kdam -= 500;
                 Money = 0;
                 JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
             }
-        }
-        catch(Exception e){
-        
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_lKdamMouseClicked
 
     private void lTreyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lTreyMouseClicked
         Money = Integer.parseInt(txtMoney.getText());
-        try{
+        try {
             Trey += 500;
             Money -= 500;
-            if(Trey <= Money || Money >= 0){
+            if (Trey <= Money || Money >= 0) {
                 txt6.setText(String.valueOf(Trey));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear6.setEnabled(true);
-                
-            }
-            else{
+
+            } else {
                 Trey -= 500;
                 Money = 0;
                 JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
             }
-        }
-        catch(Exception e){
-        
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_lTreyMouseClicked
 
     private void btnClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear1ActionPerformed
-        try{
+        try {
             Khla -= 500;
             Money += 500;
-            
-             if(Khla == 0){
+
+            if (Khla == 0) {
                 txt1.setText(String.valueOf(Khla));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear1.setEnabled(false);
-            }
-            else if(Khla <= Money || Money >= 0){
+            } else if (Khla <= Money || Money >= 0) {
                 txt1.setText(String.valueOf(Khla));
                 txtMoney.setText(String.valueOf(Money));
-            }  
-        }
-        catch(Exception e){
-        
+            }
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_btnClear1ActionPerformed
 
     private void btnClear2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear2ActionPerformed
-        try{
+        try {
             Klouk -= 500;
             Money += 500;
-            
-             if(Klouk == 0){
+
+            if (Klouk == 0) {
                 txt2.setText(String.valueOf(Klouk));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear2.setEnabled(false);
-            }
-            else if(Klouk <= Money || Money >= 0){
+            } else if (Klouk <= Money || Money >= 0) {
                 txt2.setText(String.valueOf(Klouk));
                 txtMoney.setText(String.valueOf(Money));
-            }  
-        }
-        catch(Exception e){
-        
+            }
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_btnClear2ActionPerformed
 
     private void btnClear3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear3ActionPerformed
-        try{
+        try {
             Morn -= 500;
             Money += 500;
-            
-             if(Morn == 0){
+
+            if (Morn == 0) {
                 txt3.setText(String.valueOf(Morn));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear3.setEnabled(false);
-            }
-            else if(Morn <= Money || Money >= 0){
+            } else if (Morn <= Money || Money >= 0) {
                 txt3.setText(String.valueOf(Morn));
                 txtMoney.setText(String.valueOf(Money));
-            }  
-        }
-        catch(Exception e){
-        
+            }
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_btnClear3ActionPerformed
 
     private void btnClear4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear4ActionPerformed
-        try{
+        try {
             Bongkong -= 500;
             Money += 500;
-            
-             if(Bongkong == 0){
+
+            if (Bongkong == 0) {
                 txt4.setText(String.valueOf(Bongkong));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear4.setEnabled(false);
-            }
-            else if(Bongkong <= Money || Money >= 0){
+            } else if (Bongkong <= Money || Money >= 0) {
                 txt4.setText(String.valueOf(Bongkong));
                 txtMoney.setText(String.valueOf(Money));
-            }  
-        }
-        catch(Exception e){
-        
+            }
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_btnClear4ActionPerformed
 
     private void btnClear5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear5ActionPerformed
-        try{
+        try {
             Kdam -= 500;
             Money += 500;
-            
-             if(Kdam == 0){
+
+            if (Kdam == 0) {
                 txt5.setText(String.valueOf(Kdam));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear5.setEnabled(false);
-            }
-            else if(Kdam <= Money || Money >= 0){
+            } else if (Kdam <= Money || Money >= 0) {
                 txt5.setText(String.valueOf(Kdam));
                 txtMoney.setText(String.valueOf(Money));
-            }  
-        }
-        catch(Exception e){
-        
+            }
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_btnClear5ActionPerformed
 
     private void btnClear6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear6ActionPerformed
-        try{
+        try {
             Trey -= 500;
             Money += 500;
-            
-             if(Trey == 0){
+
+            if (Trey == 0) {
                 txt6.setText(String.valueOf(Trey));
                 txtMoney.setText(String.valueOf(Money));
                 btnClear6.setEnabled(false);
-            }
-            else if(Trey <= Money || Money >= 0){
+            } else if (Trey <= Money || Money >= 0) {
                 txt6.setText(String.valueOf(Trey));
                 txtMoney.setText(String.valueOf(Money));
-            }  
-        }
-        catch(Exception e){
-        
+            }
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_btnClear6ActionPerformed
 
     private void buttonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextActionPerformed
-     // Save current player's money
-    Player currentPlayer = players.get(currentPlayerIndex);
-    currentPlayer.money = Integer.parseInt(txtMoney.getText());
-    currentPlayer.khla = Khla;
-    currentPlayer.klouk = Klouk;
-    currentPlayer.morn = Morn;
-    currentPlayer.bongkong = Bongkong;
-    currentPlayer.kdam = Kdam;
-    currentPlayer.trey = Trey;
-    
-    // Switch to next player
-    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-    updatePlayerDisplay();
-    
-    // Enable/disable navigation buttons
-    updateNavigationButtons();
-    
-    // Check if any player has lost
-    if (checkGameEnd()) {
-        handleGameEnd();
-    }
+        // Save current player's money
+        Player currentPlayer = players.get(currentPlayerIndex);
+        currentPlayer.money = Integer.parseInt(txtMoney.getText());
+
+        currentPlayer.khla = Khla;
+        currentPlayer.klouk = Klouk;
+        currentPlayer.morn = Morn;
+        currentPlayer.bongkong = Bongkong;
+        currentPlayer.kdam = Kdam;
+        currentPlayer.trey = Trey;
+
+        // Switch to next player
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        updatePlayerDisplay();
+
+        getGameStatePlayer();
+
+        // Enable/disable navigation buttons
+        updateNavigationButtons();
+
+        // Check if any player has lost
+        if (checkGameEnd()) {
+            handleGameEnd();
+        }
     }//GEN-LAST:event_buttonNextActionPerformed
 
     private void buttonPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPreviousActionPerformed
-    // Save current player's money
-    players.get(currentPlayerIndex).money = Integer.parseInt(txtMoney.getText());
-    
-    // Switch to previous player
-    currentPlayerIndex = (currentPlayerIndex - 1 + players.size()) % players.size();
-    updatePlayerDisplay();
-    
-    // Reset the game state
-    resetGameState();
-    
-    // Enable/disable navigation buttons based on position
-    updateNavigationButtons();
+        // Save current player's money
+        Player currentPlayer = players.get(currentPlayerIndex);
+//        players.get(currentPlayerIndex).money = Integer.parseInt(txtMoney.getText());
+        currentPlayer.money = Integer.parseInt(txtMoney.getText());
+        currentPlayer.khla = Khla;
+        currentPlayer.klouk = Klouk;
+        currentPlayer.morn = Morn;
+        currentPlayer.bongkong = Bongkong;
+        currentPlayer.kdam = Kdam;
+        currentPlayer.trey = Trey;
+
+        // Switch to previous player
+        currentPlayerIndex = (currentPlayerIndex - 1 + players.size()) % players.size();
+        updatePlayerDisplay();
+
+        getGameStatePlayer();
+        // Reset the game state
+//    resetGameState();
+        // Enable/disable navigation buttons based on position
+        updateNavigationButtons();
     }//GEN-LAST:event_buttonPreviousActionPerformed
 
     private void txt5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt5ActionPerformed
 
+    private void getGameStatePlayer() {
+        txt1.setText(String.valueOf(players.get(currentPlayerIndex).khla));
+        txt2.setText(String.valueOf(players.get(currentPlayerIndex).klouk));
+        txt3.setText(String.valueOf(players.get(currentPlayerIndex).morn));
+        txt4.setText(String.valueOf(players.get(currentPlayerIndex).bongkong));
+        txt5.setText(String.valueOf(players.get(currentPlayerIndex).kdam));
+        txt6.setText(String.valueOf(players.get(currentPlayerIndex).trey));
+    }
+
     // Add helper method to reset game state
-private void resetGameState() {
-    txt1.setText("0");
-    txt2.setText("0");
-    txt3.setText("0");
-    txt4.setText("0");
-    txt5.setText("0");
-    txt6.setText("0");
-    Khla = Klouk = Morn = Bongkong = Kdam = Trey = 0;
-    lWin.setText("");
-    
-    // Enable betting areas
-    lKhla.setEnabled(true);
-    lKlouk.setEnabled(true);
-    lMorn.setEnabled(true);
-    lBongkong.setEnabled(true);
-    lKdam.setEnabled(true);
-    lTrey.setEnabled(true);
-    
-    // Reset buttons state
-    btnStart.setEnabled(true);
-    buttonNext.setEnabled(false);
-    btnPlayAgain.setEnabled(false);
-    btnStop.setEnabled(false);
-    
-    // Reset clear buttons
-    btnClear1.setEnabled(false);
-    btnClear2.setEnabled(false);
-    btnClear3.setEnabled(false);
-    btnClear4.setEnabled(false);
-    btnClear5.setEnabled(false);
-    btnClear6.setEnabled(false);
-}
+    private void resetGameState() {
+        txt1.setText("0");
+        txt2.setText("0");
+        txt3.setText("0");
+        txt4.setText("0");
+        txt5.setText("0");
+        txt6.setText("0");
+        Khla = Klouk = Morn = Bongkong = Kdam = Trey = 0;
+        lWin.setText("");
+
+        // Enable betting areas
+        lKhla.setEnabled(true);
+        lKlouk.setEnabled(true);
+        lMorn.setEnabled(true);
+        lBongkong.setEnabled(true);
+        lKdam.setEnabled(true);
+        lTrey.setEnabled(true);
+
+        // Reset buttons state
+        btnStart.setEnabled(true);
+        buttonNext.setEnabled(false);
+        btnPlayAgain.setEnabled(false);
+        btnStop.setEnabled(false);
+
+        // Reset clear buttons
+        btnClear1.setEnabled(false);
+        btnClear2.setEnabled(false);
+        btnClear3.setEnabled(false);
+        btnClear4.setEnabled(false);
+        btnClear5.setEnabled(false);
+        btnClear6.setEnabled(false);
+    }
 
 // Add helper method to update navigation buttons
-private void updateNavigationButtons() {
-    // Enable both buttons by default
-    buttonPrevious.setEnabled(true);
-    buttonNext.setEnabled(true);
-    
-    // Disable Previous button if at first player
-    if (currentPlayerIndex == 0) {
-        buttonPrevious.setEnabled(false);
-    }
-    
-    // Disable Next button if at last player
-    if (currentPlayerIndex == players.size() - 1) {
-        buttonNext.setEnabled(false);
-    }
-}
+    private void updateNavigationButtons() {
+        // Enable both buttons by default
+        buttonPrevious.setEnabled(true);
+        buttonNext.setEnabled(true);
 
-// Add helper method to handle game end
-private void handleGameEnd() {
-    StringBuilder results = new StringBuilder("Game Over!\n\nFinal Results:\n");
-    Player winner = players.get(0);
-    
-    for (Player player : players) {
-        results.append(player.name)
-              .append(": $")
-              .append(player.money)
-              .append("\n");
-        if (player.money > winner.money) {
-            winner = player;
+        // Disable Previous button if at first player
+        if (currentPlayerIndex == 0) {
+            buttonPrevious.setEnabled(false);
+        }
+
+        // Disable Next button if at last player
+        if (currentPlayerIndex == players.size() - 1) {
+            buttonNext.setEnabled(false);
         }
     }
-    
-    results.append("\nWinner: ").append(winner.name)
-           .append(" with $").append(winner.money);
-    
-    JOptionPane.showMessageDialog(this,
-        results.toString(),
-        "Game Over",
-        JOptionPane.INFORMATION_MESSAGE);
-        
-    // Disable all game controls
-    btnStart.setEnabled(false);
-    btnStop.setEnabled(false);
-    btnPlayAgain.setEnabled(false);
-    buttonNext.setEnabled(false);
-    buttonPrevious.setEnabled(false);
-}
+
+// Add helper method to handle game end
+    private void handleGameEnd() {
+        StringBuilder results = new StringBuilder("Game Over!\n\nFinal Results:\n");
+        Player winner = players.get(0);
+
+        for (Player player : players) {
+            results.append(player.name)
+                    .append(": $")
+                    .append(player.money)
+                    .append("\n");
+            if (player.money > winner.money) {
+                winner = player;
+            }
+        }
+
+        results.append("\nWinner: ").append(winner.name)
+                .append(" with $").append(winner.money);
+
+        JOptionPane.showMessageDialog(this,
+                results.toString(),
+                "Game Over",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        // Disable all game controls
+        btnStart.setEnabled(false);
+        btnStop.setEnabled(false);
+        btnPlayAgain.setEnabled(false);
+        buttonNext.setEnabled(false);
+        buttonPrevious.setEnabled(false);
+    }
 
     public static void main(String args[]) {
-        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Index().setVisible(true);
-                
+
             }
         });
     }
