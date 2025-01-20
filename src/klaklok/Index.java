@@ -23,34 +23,49 @@ public class Index extends javax.swing.JFrame {
     private ArrayList<Player> players;
     private int currentPlayerIndex;
         // Player class to store player information
-    private class Player {
-        String name;
-        int money;
-        
-        public Player(String name, int initialMoney) {
-            this.name = name;
-            this.money = initialMoney;
-        }
+private class Player {
+    String name;
+    int money;
+    // Add fields to store betting values
+    int khla;
+    int klouk;
+    int morn;
+    int bongkong;
+    int kdam;
+    int trey;
+    
+    public Player(String name, int initialMoney) {
+        this.name = name;
+        this.money = initialMoney;
+        // Initialize betting values to 0
+        this.khla = 0;
+        this.klouk = 0;
+        this.morn = 0;
+        this.bongkong = 0;
+        this.kdam = 0;
+        this.trey = 0;
     }
+}
     public Index() {
         initComponents();
         this.setLocationRelativeTo(null); 
-                initializePlayers(); // Call method to set up players
+        initializePlayers(); // Call method to set up players
 
     }
     
         private void initializePlayers() {
         players = new ArrayList<>();
-        
+            updateNavigationButtons();
+
         // Ask for number of players
         String input = JOptionPane.showInputDialog(this, 
-            "Enter number of players (1-4):", 
+            "Enter number of players (1-10):", 
             "Player Setup", 
             JOptionPane.QUESTION_MESSAGE);
             
         try {
             int numPlayers = Integer.parseInt(input);
-            if (numPlayers < 1 || numPlayers > 4) {
+            if (numPlayers < 1 || numPlayers > 10) {
                 JOptionPane.showMessageDialog(this, 
                     "Invalid number of players. Setting to 1 player.",
                     "Invalid Input",
@@ -85,11 +100,37 @@ public class Index extends javax.swing.JFrame {
     }
     
     // Add method to update display for current player
-    private void updatePlayerDisplay() {
-        Player currentPlayer = players.get(currentPlayerIndex);
-        label2.setText(currentPlayer.name + "'s Money");
-        txtMoney.setText(String.valueOf(currentPlayer.money));
-    }
+private void updatePlayerDisplay() {
+    Player currentPlayer = players.get(currentPlayerIndex);
+    label2.setText(currentPlayer.name + "'s Money");
+    txtMoney.setText(String.valueOf(currentPlayer.money));
+    
+    // Update betting text fields
+    txt1.setText(String.valueOf(currentPlayer.khla));
+    txt2.setText(String.valueOf(currentPlayer.klouk));
+    txt3.setText(String.valueOf(currentPlayer.morn));
+    txt4.setText(String.valueOf(currentPlayer.bongkong));
+    txt5.setText(String.valueOf(currentPlayer.kdam));
+    txt6.setText(String.valueOf(currentPlayer.trey));
+    
+    // Update global betting variables to match current player
+    Khla = currentPlayer.khla;
+    Klouk = currentPlayer.klouk;
+    Morn = currentPlayer.morn;
+    Bongkong = currentPlayer.bongkong;
+    Kdam = currentPlayer.kdam;
+    Trey = currentPlayer.trey;
+    
+    // Enable/disable clear buttons based on bet values
+    btnClear1.setEnabled(currentPlayer.khla > 0);
+    btnClear2.setEnabled(currentPlayer.klouk > 0);
+    btnClear3.setEnabled(currentPlayer.morn > 0);
+    btnClear4.setEnabled(currentPlayer.bongkong > 0);
+    btnClear5.setEnabled(currentPlayer.kdam > 0);
+    btnClear6.setEnabled(currentPlayer.trey > 0);
+}
+
+
 //random
     private String[] image= {"image/1.jpg", "image/2.jpg", "image/3.jpg", "image/4.jpg", "image/5.jpg", "image/6.jpg"};
     Random rand = new Random();
@@ -342,7 +383,8 @@ public class Index extends javax.swing.JFrame {
         txtMoney = new java.awt.TextField();
         btnExit = new javax.swing.JButton();
         label2 = new java.awt.Label();
-        jButton1 = new javax.swing.JButton();
+        buttonNext = new javax.swing.JButton();
+        buttonPrevious = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -421,6 +463,11 @@ public class Index extends javax.swing.JFrame {
         txt5.setEditable(false);
         txt5.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         txt5.setText("0");
+        txt5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt5ActionPerformed(evt);
+            }
+        });
         txt5.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txt5KeyTyped(evt);
@@ -629,10 +676,17 @@ public class Index extends javax.swing.JFrame {
         label2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         label2.setText("Your Money");
 
-        jButton1.setText("Next Player");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonNext.setText("Next Player");
+        buttonNext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                buttonNextActionPerformed(evt);
+            }
+        });
+
+        buttonPrevious.setText("Previous Player");
+        buttonPrevious.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonPreviousActionPerformed(evt);
             }
         });
 
@@ -647,24 +701,25 @@ public class Index extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                                .addComponent(btnStop, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnPlayAgain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(btnExit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lWin, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(43, 43, 43)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(buttonPrevious, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(buttonNext))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                                .addComponent(btnStop, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnPlayAgain, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnExit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -685,7 +740,9 @@ public class Index extends javax.swing.JFrame {
                         .addGap(33, 33, 33)
                         .addComponent(btnPlayAgain)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(buttonNext, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+                            .addComponent(buttonPrevious, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -759,7 +816,7 @@ public class Index extends javax.swing.JFrame {
        Calculate();
        MainMoney = Integer.parseInt(txtMoney.getText());
        
-           jButton1.setEnabled(true);
+           buttonNext.setEnabled(true);
 
        
     }//GEN-LAST:event_btnStopActionPerformed
@@ -825,27 +882,26 @@ public class Index extends javax.swing.JFrame {
         lKdam.setEnabled(true);
         lTrey.setEnabled(true);
     }//GEN-LAST:event_btnPlayAgainActionPerformed
-
+//
     private void lKhlaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lKhlaMouseClicked
-        Money = Integer.parseInt(txtMoney.getText());
-        try{
-            Khla += 500;
-            Money -= 500;
-            if(Khla <= Money || Money >= 0){
-                txt1.setText(String.valueOf(Khla));
-                txtMoney.setText(String.valueOf(Money));
-                btnClear1.setEnabled(true);
-                
-            }
-            else{
-                Khla -= 500;
-                Money = 0;
-                JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
-            }
+    Money = Integer.parseInt(txtMoney.getText());
+    Player currentPlayer = players.get(currentPlayerIndex);
+    try {
+        currentPlayer.khla += 500;
+        Money -= 500;
+        if(currentPlayer.khla <= Money || Money >= 0) {
+            txt1.setText(String.valueOf(currentPlayer.khla));
+            txtMoney.setText(String.valueOf(Money));
+            btnClear1.setEnabled(true);
+            Khla = currentPlayer.khla; // Update global variable
+        } else {
+            currentPlayer.khla -= 500;
+            Money = 0;
+            JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
         }
-        catch(Exception e){
-        
-        }
+    } catch(Exception e) {
+        // Handle exception
+    }
     }//GEN-LAST:event_lKhlaMouseClicked
 
     private void lKloukMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lKloukMouseClicked
@@ -1074,16 +1130,51 @@ public class Index extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnClear6ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-            // Save current player's money
-    players.get(currentPlayerIndex).money = Integer.parseInt(txtMoney.getText());
+    private void buttonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextActionPerformed
+     // Save current player's money
+    Player currentPlayer = players.get(currentPlayerIndex);
+    currentPlayer.money = Integer.parseInt(txtMoney.getText());
+    currentPlayer.khla = Khla;
+    currentPlayer.klouk = Klouk;
+    currentPlayer.morn = Morn;
+    currentPlayer.bongkong = Bongkong;
+    currentPlayer.kdam = Kdam;
+    currentPlayer.trey = Trey;
     
     // Switch to next player
     currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
     updatePlayerDisplay();
     
+    // Enable/disable navigation buttons
+    updateNavigationButtons();
+    
+    // Check if any player has lost
+    if (checkGameEnd()) {
+        handleGameEnd();
+    }
+    }//GEN-LAST:event_buttonNextActionPerformed
+
+    private void buttonPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPreviousActionPerformed
+    // Save current player's money
+    players.get(currentPlayerIndex).money = Integer.parseInt(txtMoney.getText());
+    
+    // Switch to previous player
+    currentPlayerIndex = (currentPlayerIndex - 1 + players.size()) % players.size();
+    updatePlayerDisplay();
+    
     // Reset the game state
+    resetGameState();
+    
+    // Enable/disable navigation buttons based on position
+    updateNavigationButtons();
+    }//GEN-LAST:event_buttonPreviousActionPerformed
+
+    private void txt5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt5ActionPerformed
+
+    // Add helper method to reset game state
+private void resetGameState() {
     txt1.setText("0");
     txt2.setText("0");
     txt3.setText("0");
@@ -1103,7 +1194,7 @@ public class Index extends javax.swing.JFrame {
     
     // Reset buttons state
     btnStart.setEnabled(true);
-    jButton1.setEnabled(false);
+    buttonNext.setEnabled(false);
     btnPlayAgain.setEnabled(false);
     btnStop.setEnabled(false);
     
@@ -1114,39 +1205,56 @@ public class Index extends javax.swing.JFrame {
     btnClear4.setEnabled(false);
     btnClear5.setEnabled(false);
     btnClear6.setEnabled(false);
-    
-    // Check if any player has lost
-    if (checkGameEnd()) {
-        StringBuilder results = new StringBuilder("Game Over!\n\nFinal Results:\n");
-        Player winner = players.get(0);
-        
-        for (Player player : players) {
-            results.append(player.name)
-                  .append(": $")
-                  .append(player.money)
-                  .append("\n");
-            if (player.money > winner.money) {
-                winner = player;
-            }
-        }
-        
-        results.append("\nWinner: ").append(winner.name)
-               .append(" with $").append(winner.money);
-        
-        JOptionPane.showMessageDialog(this,
-            results.toString(),
-            "Game Over",
-            JOptionPane.INFORMATION_MESSAGE);
-            
-        // Disable all game controls
-        btnStart.setEnabled(false);
-        btnStop.setEnabled(false);
-        btnPlayAgain.setEnabled(false);
-        jButton1.setEnabled(false);
-    }
-    }//GEN-LAST:event_jButton1ActionPerformed
+}
 
+// Add helper method to update navigation buttons
+private void updateNavigationButtons() {
+    // Enable both buttons by default
+    buttonPrevious.setEnabled(true);
+    buttonNext.setEnabled(true);
     
+    // Disable Previous button if at first player
+    if (currentPlayerIndex == 0) {
+        buttonPrevious.setEnabled(false);
+    }
+    
+    // Disable Next button if at last player
+    if (currentPlayerIndex == players.size() - 1) {
+        buttonNext.setEnabled(false);
+    }
+}
+
+// Add helper method to handle game end
+private void handleGameEnd() {
+    StringBuilder results = new StringBuilder("Game Over!\n\nFinal Results:\n");
+    Player winner = players.get(0);
+    
+    for (Player player : players) {
+        results.append(player.name)
+              .append(": $")
+              .append(player.money)
+              .append("\n");
+        if (player.money > winner.money) {
+            winner = player;
+        }
+    }
+    
+    results.append("\nWinner: ").append(winner.name)
+           .append(" with $").append(winner.money);
+    
+    JOptionPane.showMessageDialog(this,
+        results.toString(),
+        "Game Over",
+        JOptionPane.INFORMATION_MESSAGE);
+        
+    // Disable all game controls
+    btnStart.setEnabled(false);
+    btnStop.setEnabled(false);
+    btnPlayAgain.setEnabled(false);
+    buttonNext.setEnabled(false);
+    buttonPrevious.setEnabled(false);
+}
+
     public static void main(String args[]) {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1169,7 +1277,8 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JButton btnPlayAgain;
     private javax.swing.JButton btnStart;
     private javax.swing.JButton btnStop;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton buttonNext;
+    private javax.swing.JButton buttonPrevious;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lBongkong;
