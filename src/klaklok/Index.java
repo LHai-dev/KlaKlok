@@ -333,6 +333,28 @@ public class Index extends javax.swing.JFrame {
             int totalWin = 0;
             int totalLose = 0;
 
+            // Add player's bets to the summary
+            resultSummary.append("Player " + (i + 1) + " (" + player.name + "):\n");
+            resultSummary.append("  Bets:\n");
+            if (player.khla > 0) {
+                resultSummary.append("    Khla: " + player.khla + "\n");
+            }
+            if (player.klouk > 0) {
+                resultSummary.append("    Klouk: " + player.klouk + "\n");
+            }
+            if (player.morn > 0) {
+                resultSummary.append("    Morn: " + player.morn + "\n");
+            }
+            if (player.bongkong > 0) {
+                resultSummary.append("    Bongkong: " + player.bongkong + "\n");
+            }
+            if (player.kdam > 0) {
+                resultSummary.append("    Kdam: " + player.kdam + "\n");
+            }
+            if (player.trey > 0) {
+                resultSummary.append("    Trey: " + player.trey + "\n");
+            }
+
             // Calculate wins and losses for each bet
             if (player.khla > 0) {
                 if (containsResult(results, 1)) {
@@ -381,7 +403,6 @@ public class Index extends javax.swing.JFrame {
             player.money += totalWin;
 
             // Add player's result to the summary
-            resultSummary.append("Player " + (i + 1) + " (" + player.name + "):\n");
             resultSummary.append("  Win: " + totalWin + "\n");
             resultSummary.append("  Lose: " + totalLose + "\n");
             resultSummary.append("  Total Money: " + player.money + "\n\n");
@@ -870,9 +891,12 @@ public class Index extends javax.swing.JFrame {
         updatePlayerDisplay();
 
         // Reset the game state
-        btnStart.setEnabled(true);
+        btnStart.setEnabled(false);
         btnPlayAgain.setEnabled(false);
         btnStop.setEnabled(false);
+        buttonNext.setEnabled(false);
+        buttonPrevious.setEnabled(false);
+
         txt1.setText("0");
         txt2.setText("0");
         txt3.setText("0");
@@ -914,11 +938,12 @@ public class Index extends javax.swing.JFrame {
         btnPlayAgain.setEnabled(true);
         btnStart.setEnabled(false);
         btnStop.setEnabled(false);
+        buttonNext.setEnabled(false);
+        buttonPrevious.setEnabled(false);
         Calculate();
         MainMoney = Integer.parseInt(txtMoney.getText());
 
-        buttonNext.setEnabled(true);
-
+//        buttonNext.setEnabled(fsle);
 
     }//GEN-LAST:event_btnStopActionPerformed
 
@@ -965,248 +990,300 @@ public class Index extends javax.swing.JFrame {
     }//GEN-LAST:event_txt6KeyTyped
 
     private void btnPlayAgainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayAgainActionPerformed
+//        btnStart.setEnabled(true);
+//        btnPlayAgain.setEnabled(false);
+//        btnStop.setEnabled(false);
+//        txt1.setText("0");
+//        txt2.setText("0");
+//        txt3.setText("0");
+//        txt4.setText("0");
+//        txt5.setText("0");
+//        txt6.setText("0");
+//        Khla = Klouk = Morn = Bongkong = Kdam = Trey = 0;
+//
+//        lKhla.setEnabled(true);
+//        lKlouk.setEnabled(true);
+//        lMorn.setEnabled(true);
+//        lBongkong.setEnabled(true);
+//        lKdam.setEnabled(true);
+//        lTrey.setEnabled(true);
         btnStart.setEnabled(true);
         btnPlayAgain.setEnabled(false);
         btnStop.setEnabled(false);
+        buttonNext.setEnabled(true);
+//        buttonPrevious.setEnabled(true);
+
+        // Reset text fields to "0"
         txt1.setText("0");
         txt2.setText("0");
         txt3.setText("0");
         txt4.setText("0");
         txt5.setText("0");
         txt6.setText("0");
+
+        // Reset global bet variables to 0
         Khla = Klouk = Morn = Bongkong = Kdam = Trey = 0;
 
+        // Reset all players' bets to 0
+        for (Player player : players) {
+            player.khla = 0;
+            player.klouk = 0;
+            player.morn = 0;
+            player.bongkong = 0;
+            player.kdam = 0;
+            player.trey = 0;
+        }
+
+        // Enable bet labels
         lKhla.setEnabled(true);
         lKlouk.setEnabled(true);
         lMorn.setEnabled(true);
         lBongkong.setEnabled(true);
         lKdam.setEnabled(true);
         lTrey.setEnabled(true);
+
+        // Update the display for the current player
+        updatePlayerDisplay();
+
+
     }//GEN-LAST:event_btnPlayAgainActionPerformed
 //
     private void lKhlaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lKhlaMouseClicked
+//        Money = Integer.parseInt(txtMoney.getText());
+//        Player currentPlayer = players.get(currentPlayerIndex);
+//        try {
+//            currentPlayer.khla += 500;
+//            Money -= 500;
+//            if (currentPlayer.khla <= Money || Money >= 0) {
+//                txt1.setText(String.valueOf(currentPlayer.khla));
+//                txtMoney.setText(String.valueOf(Money));
+//                btnClear1.setEnabled(true);
+//                Khla = currentPlayer.khla; // Update global variable
+//            } else {
+//                currentPlayer.khla -= 500;
+//                Money = 0;
+//                JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
+//            }
+//        } catch (Exception e) {
+//            // Handle exception
+//        }
         Money = Integer.parseInt(txtMoney.getText());
         Player currentPlayer = players.get(currentPlayerIndex);
-        try {
-            currentPlayer.khla += 500;
-            Money -= 500;
-            if (currentPlayer.khla <= Money || Money >= 0) {
-                txt1.setText(String.valueOf(currentPlayer.khla));
-                txtMoney.setText(String.valueOf(Money));
-                btnClear1.setEnabled(true);
-                Khla = currentPlayer.khla; // Update global variable
-            } else {
-                currentPlayer.khla -= 500;
-                Money = 0;
-                JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
-            }
-        } catch (Exception e) {
-            // Handle exception
+
+        // Check if the player has enough money to place the bet
+        if (Money >= 500) {
+            currentPlayer.khla += 500; // Increase the bet amount
+            Money -= 500; // Deduct the bet amount from the player's money
+            txt1.setText(String.valueOf(currentPlayer.khla)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+            btnClear1.setEnabled(true); // Enable the clear button
+            Khla = currentPlayer.khla; // Update the global variable
+        } else {
+            // Show a message if the player doesn't have enough money
+            JOptionPane.showMessageDialog(this, "Not enough money to place this bet!", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_lKhlaMouseClicked
 
     private void lKloukMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lKloukMouseClicked
         Money = Integer.parseInt(txtMoney.getText());
-        try {
-            Klouk += 500;
-            Money -= 500;
-            if (Klouk <= Money || Money >= 0) {
-                txt2.setText(String.valueOf(Klouk));
-                txtMoney.setText(String.valueOf(Money));
-                btnClear2.setEnabled(true);
-            } else {
-                Klouk -= 500;
-                Money = 0;
-                JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
-            }
-        } catch (Exception e) {
+        Player currentPlayer = players.get(currentPlayerIndex);
 
+        // Check if the player has enough money to place the bet
+        if (Money >= 500) {
+            currentPlayer.klouk += 500; // Increase the bet amount
+            Money -= 500; // Deduct the bet amount from the player's money
+            txt2.setText(String.valueOf(currentPlayer.klouk)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+            btnClear2.setEnabled(true); // Enable the clear button
+            Klouk = currentPlayer.klouk; // Update the global variable
+        } else {
+            // Show a message if the player doesn't have enough money
+            JOptionPane.showMessageDialog(this, "Not enough money to place this bet!", "Error", JOptionPane.WARNING_MESSAGE);
         }
+
     }//GEN-LAST:event_lKloukMouseClicked
 
     private void lMornMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lMornMouseClicked
         Money = Integer.parseInt(txtMoney.getText());
-        try {
-            Morn += 500;
-            Money -= 500;
-            if (Morn <= Money || Money >= 0) {
-                txt3.setText(String.valueOf(Morn));
-                txtMoney.setText(String.valueOf(Money));
-                btnClear3.setEnabled(true);
-            } else {
-                Morn -= 500;
-                Money = 0;
-                JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
-            }
-        } catch (Exception e) {
+        Player currentPlayer = players.get(currentPlayerIndex);
 
+        // Check if the player has enough money to place the bet
+        if (Money >= 500) {
+            currentPlayer.morn += 500; // Increase the bet amount
+            Money -= 500; // Deduct the bet amount from the player's money
+            txt3.setText(String.valueOf(currentPlayer.morn)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+            btnClear3.setEnabled(true); // Enable the clear button
+            Morn = currentPlayer.morn; // Update the global variable
+        } else {
+            // Show a message if the player doesn't have enough money
+            JOptionPane.showMessageDialog(this, "Not enough money to place this bet!", "Error", JOptionPane.WARNING_MESSAGE);
         }
+
     }//GEN-LAST:event_lMornMouseClicked
 
     private void lBongkongMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lBongkongMouseClicked
         Money = Integer.parseInt(txtMoney.getText());
-        try {
-            Bongkong += 500;
-            Money -= 500;
-            if (Bongkong <= Money || Money >= 0) {
-                txt4.setText(String.valueOf(Bongkong));
-                txtMoney.setText(String.valueOf(Money));
-                btnClear4.setEnabled(true);
-            } else {
-                Bongkong -= 500;
-                Money = 0;
-                JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
-            }
-        } catch (Exception e) {
+        Player currentPlayer = players.get(currentPlayerIndex);
 
+        // Check if the player has enough money to place the bet
+        if (Money >= 500) {
+            currentPlayer.bongkong += 500; // Increase the bet amount
+            Money -= 500; // Deduct the bet amount from the player's money
+            txt4.setText(String.valueOf(currentPlayer.bongkong)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+            btnClear4.setEnabled(true); // Enable the clear button
+            Bongkong = currentPlayer.bongkong; // Update the global variable
+        } else {
+            // Show a message if the player doesn't have enough money
+            JOptionPane.showMessageDialog(this, "Not enough money to place this bet!", "Error", JOptionPane.WARNING_MESSAGE);
         }
+
     }//GEN-LAST:event_lBongkongMouseClicked
 
     private void lKdamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lKdamMouseClicked
         Money = Integer.parseInt(txtMoney.getText());
-        try {
-            Kdam += 500;
-            Money -= 500;
-            if (Kdam <= Money || Money >= 0) {
-                txt5.setText(String.valueOf(Kdam));
-                txtMoney.setText(String.valueOf(Money));
-                btnClear5.setEnabled(true);
-            } else {
-                Kdam -= 500;
-                Money = 0;
-                JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
-            }
-        } catch (Exception e) {
+        Player currentPlayer = players.get(currentPlayerIndex);
 
+        // Check if the player has enough money to place the bet
+        if (Money >= 500) {
+            currentPlayer.kdam += 500; // Increase the bet amount
+            Money -= 500; // Deduct the bet amount from the player's money
+            txt5.setText(String.valueOf(currentPlayer.kdam)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+            btnClear5.setEnabled(true); // Enable the clear button
+            Kdam = currentPlayer.kdam; // Update the global variable
+        } else {
+            // Show a message if the player doesn't have enough money
+            JOptionPane.showMessageDialog(this, "Not enough money to place this bet!", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_lKdamMouseClicked
 
     private void lTreyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lTreyMouseClicked
         Money = Integer.parseInt(txtMoney.getText());
-        try {
-            Trey += 500;
-            Money -= 500;
-            if (Trey <= Money || Money >= 0) {
-                txt6.setText(String.valueOf(Trey));
-                txtMoney.setText(String.valueOf(Money));
-                btnClear6.setEnabled(true);
+        Player currentPlayer = players.get(currentPlayerIndex);
 
-            } else {
-                Trey -= 500;
-                Money = 0;
-                JOptionPane.showMessageDialog(this, "Hey! boss you have only " + MainMoney);
-            }
-        } catch (Exception e) {
-
+        // Check if the player has enough money to place the bet
+        if (Money >= 500) {
+            currentPlayer.trey += 500; // Increase the bet amount
+            Money -= 500; // Deduct the bet amount from the player's money
+            txt6.setText(String.valueOf(currentPlayer.trey)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+            btnClear6.setEnabled(true); // Enable the clear button
+            Trey = currentPlayer.trey; // Update the global variable
+        } else {
+            // Show a message if the player doesn't have enough money
+            JOptionPane.showMessageDialog(this, "Not enough money to place this bet!", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_lTreyMouseClicked
 
     private void btnClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear1ActionPerformed
-        try {
-            Khla -= 500;
-            Money += 500;
+        Money = Integer.parseInt(txtMoney.getText());
+        Player currentPlayer = players.get(currentPlayerIndex);
 
-            if (Khla == 0) {
-                txt1.setText(String.valueOf(Khla));
-                txtMoney.setText(String.valueOf(Money));
+        // Check if the bet amount is greater than 0
+        if (currentPlayer.khla > 0) {
+            currentPlayer.khla -= 500; // Decrease the bet amount
+            Money += 500; // Refund the bet amount to the player's money
+            txt1.setText(String.valueOf(currentPlayer.khla)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+
+            // Disable the clear button if the bet amount is 0
+            if (currentPlayer.khla == 0) {
                 btnClear1.setEnabled(false);
-            } else if (Khla <= Money || Money >= 0) {
-                txt1.setText(String.valueOf(Khla));
-                txtMoney.setText(String.valueOf(Money));
             }
-        } catch (Exception e) {
-
         }
     }//GEN-LAST:event_btnClear1ActionPerformed
 
     private void btnClear2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear2ActionPerformed
-        try {
-            Klouk -= 500;
-            Money += 500;
+        Money = Integer.parseInt(txtMoney.getText());
+        Player currentPlayer = players.get(currentPlayerIndex);
 
-            if (Klouk == 0) {
-                txt2.setText(String.valueOf(Klouk));
-                txtMoney.setText(String.valueOf(Money));
+        // Check if the bet amount is greater than 0
+        if (currentPlayer.klouk > 0) {
+            currentPlayer.klouk -= 500; // Decrease the bet amount
+            Money += 500; // Refund the bet amount to the player's money
+            txt2.setText(String.valueOf(currentPlayer.klouk)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+
+            // Disable the clear button if the bet amount is 0
+            if (currentPlayer.klouk == 0) {
                 btnClear2.setEnabled(false);
-            } else if (Klouk <= Money || Money >= 0) {
-                txt2.setText(String.valueOf(Klouk));
-                txtMoney.setText(String.valueOf(Money));
             }
-        } catch (Exception e) {
-
         }
     }//GEN-LAST:event_btnClear2ActionPerformed
 
     private void btnClear3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear3ActionPerformed
-        try {
-            Morn -= 500;
-            Money += 500;
+        Money = Integer.parseInt(txtMoney.getText());
+        Player currentPlayer = players.get(currentPlayerIndex);
 
-            if (Morn == 0) {
-                txt3.setText(String.valueOf(Morn));
-                txtMoney.setText(String.valueOf(Money));
+        // Check if the bet amount is greater than 0
+        if (currentPlayer.morn > 0) {
+            currentPlayer.morn -= 500; // Decrease the bet amount
+            Money += 500; // Refund the bet amount to the player's money
+            txt3.setText(String.valueOf(currentPlayer.morn)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+
+            // Disable the clear button if the bet amount is 0
+            if (currentPlayer.morn == 0) {
                 btnClear3.setEnabled(false);
-            } else if (Morn <= Money || Money >= 0) {
-                txt3.setText(String.valueOf(Morn));
-                txtMoney.setText(String.valueOf(Money));
             }
-        } catch (Exception e) {
-
         }
     }//GEN-LAST:event_btnClear3ActionPerformed
 
     private void btnClear4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear4ActionPerformed
-        try {
-            Bongkong -= 500;
-            Money += 500;
+        Money = Integer.parseInt(txtMoney.getText());
+        Player currentPlayer = players.get(currentPlayerIndex);
 
-            if (Bongkong == 0) {
-                txt4.setText(String.valueOf(Bongkong));
-                txtMoney.setText(String.valueOf(Money));
+        // Check if the bet amount is greater than 0
+        if (currentPlayer.bongkong > 0) {
+            currentPlayer.bongkong -= 500; // Decrease the bet amount
+            Money += 500; // Refund the bet amount to the player's money
+            txt4.setText(String.valueOf(currentPlayer.bongkong)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+
+            // Disable the clear button if the bet amount is 0
+            if (currentPlayer.bongkong == 0) {
                 btnClear4.setEnabled(false);
-            } else if (Bongkong <= Money || Money >= 0) {
-                txt4.setText(String.valueOf(Bongkong));
-                txtMoney.setText(String.valueOf(Money));
             }
-        } catch (Exception e) {
-
         }
     }//GEN-LAST:event_btnClear4ActionPerformed
 
     private void btnClear5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear5ActionPerformed
-        try {
-            Kdam -= 500;
-            Money += 500;
+        Money = Integer.parseInt(txtMoney.getText());
+        Player currentPlayer = players.get(currentPlayerIndex);
 
-            if (Kdam == 0) {
-                txt5.setText(String.valueOf(Kdam));
-                txtMoney.setText(String.valueOf(Money));
+        // Check if the bet amount is greater than 0
+        if (currentPlayer.kdam > 0) {
+            currentPlayer.kdam -= 500; // Decrease the bet amount
+            Money += 500; // Refund the bet amount to the player's money
+            txt5.setText(String.valueOf(currentPlayer.kdam)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+
+            // Disable the clear button if the bet amount is 0
+            if (currentPlayer.kdam == 0) {
                 btnClear5.setEnabled(false);
-            } else if (Kdam <= Money || Money >= 0) {
-                txt5.setText(String.valueOf(Kdam));
-                txtMoney.setText(String.valueOf(Money));
             }
-        } catch (Exception e) {
-
         }
     }//GEN-LAST:event_btnClear5ActionPerformed
 
     private void btnClear6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear6ActionPerformed
-        try {
-            Trey -= 500;
-            Money += 500;
+        Money = Integer.parseInt(txtMoney.getText());
+        Player currentPlayer = players.get(currentPlayerIndex);
 
-            if (Trey == 0) {
-                txt6.setText(String.valueOf(Trey));
-                txtMoney.setText(String.valueOf(Money));
+        // Check if the bet amount is greater than 0
+        if (currentPlayer.trey > 0) {
+            currentPlayer.trey -= 500; // Decrease the bet amount
+            Money += 500; // Refund the bet amount to the player's money
+            txt6.setText(String.valueOf(currentPlayer.trey)); // Update the bet text field
+            txtMoney.setText(String.valueOf(Money)); // Update the money text field
+
+            // Disable the clear button if the bet amount is 0
+            if (currentPlayer.trey == 0) {
                 btnClear6.setEnabled(false);
-            } else if (Trey <= Money || Money >= 0) {
-                txt6.setText(String.valueOf(Trey));
-                txtMoney.setText(String.valueOf(Money));
             }
-        } catch (Exception e) {
-
         }
+
     }//GEN-LAST:event_btnClear6ActionPerformed
 
     private void buttonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextActionPerformed
@@ -1231,9 +1308,9 @@ public class Index extends javax.swing.JFrame {
         updateNavigationButtons();
 
         // Check if any player has lost
-        if (checkGameEnd()) {
-            handleGameEnd();
-        }
+//        if (checkGameEnd()) {
+//            handleGameEnd();
+//        }
     }//GEN-LAST:event_buttonNextActionPerformed
 
     private void buttonPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPreviousActionPerformed
