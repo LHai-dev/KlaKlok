@@ -942,7 +942,14 @@ public class Index extends javax.swing.JFrame {
         buttonPrevious.setEnabled(false);
         Calculate();
         MainMoney = Integer.parseInt(txtMoney.getText());
-
+        
+        txt1.setText("0");
+        txt2.setText("0");
+        txt3.setText("0");
+        txt4.setText("0");
+        txt5.setText("0");
+        txt6.setText("0");
+        
 //        buttonNext.setEnabled(fsle);
 
     }//GEN-LAST:event_btnStopActionPerformed
