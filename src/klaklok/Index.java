@@ -25,6 +25,27 @@ public class Index extends javax.swing.JFrame {
     private int currentPlayerIndex;
     // Player class to store player information
 
+    public class Boss {
+
+        public int totalWinnings = 0; // Total money won by the boss
+        public int totalLosses = 0;   // Total money lost by the boss
+
+        // Method to add winnings
+        public void addWinnings(int amount) {
+            totalWinnings += amount;
+        }
+
+        // Method to add losses
+        public void addLosses(int amount) {
+            totalLosses += amount;
+        }
+
+        // Method to get the boss's net result (winnings - losses)
+        public int getNetResult() {
+            return totalWinnings - totalLosses;
+        }
+    }
+
     private class Player {
 
         String name;
@@ -56,6 +77,7 @@ public class Index extends javax.swing.JFrame {
         initializePlayers(); // Call method to set up players
 
     }
+    private Boss boss = new Boss();
 
     private void initializePlayers() {
         players = new ArrayList<>();
@@ -359,43 +381,55 @@ public class Index extends javax.swing.JFrame {
             if (player.khla > 0) {
                 if (containsResult(results, 1)) {
                     totalWin += player.khla * 2; // Win = bet amount * 2 (original bet + win)
+                    boss.addLosses(player.khla); // Boss loses the player's winnings
                 } else {
-                    totalLose += player.khla; // Lose the bet (no money deducted, just no win)
+                    totalLose += player.khla; // Lose the bet (money goes to the boss)
+                    boss.addWinnings(player.khla); // Boss gains the player's loss
                 }
             }
             if (player.klouk > 0) {
                 if (containsResult(results, 2)) {
                     totalWin += player.klouk * 2; // Win = bet amount * 2
+                    boss.addLosses(player.klouk); // Boss loses the player's winnings
                 } else {
-                    totalLose += player.klouk; // Lose the bet (no money deducted, just no win)
+                    totalLose += player.klouk; // Lose the bet (money goes to the boss)
+                    boss.addWinnings(player.klouk); // Boss gains the player's loss
                 }
             }
             if (player.morn > 0) {
                 if (containsResult(results, 3)) {
                     totalWin += player.morn * 2; // Win = bet amount * 2
+                    boss.addLosses(player.morn); // Boss loses the player's winnings
                 } else {
-                    totalLose += player.morn; // Lose the bet (no money deducted, just no win)
+                    totalLose += player.morn; // Lose the bet (money goes to the boss)
+                    boss.addWinnings(player.morn); // Boss gains the player's loss
                 }
             }
             if (player.bongkong > 0) {
                 if (containsResult(results, 4)) {
                     totalWin += player.bongkong * 2; // Win = bet amount * 2
+                    boss.addLosses(player.bongkong); // Boss loses the player's winnings
                 } else {
-                    totalLose += player.bongkong; // Lose the bet (no money deducted, just no win)
+                    totalLose += player.bongkong; // Lose the bet (money goes to the boss)
+                    boss.addWinnings(player.bongkong); // Boss gains the player's loss
                 }
             }
             if (player.kdam > 0) {
                 if (containsResult(results, 5)) {
                     totalWin += player.kdam * 2; // Win = bet amount * 2
+                    boss.addLosses(player.kdam); // Boss loses the player's winnings
                 } else {
-                    totalLose += player.kdam; // Lose the bet (no money deducted, just no win)
+                    totalLose += player.kdam; // Lose the bet (money goes to the boss)
+                    boss.addWinnings(player.kdam); // Boss gains the player's loss
                 }
             }
             if (player.trey > 0) {
                 if (containsResult(results, 6)) {
                     totalWin += player.trey * 2; // Win = bet amount * 2
+                    boss.addLosses(player.trey); // Boss loses the player's winnings
                 } else {
-                    totalLose += player.trey; // Lose the bet (no money deducted, just no win)
+                    totalLose += player.trey; // Lose the bet (money goes to the boss)
+                    boss.addWinnings(player.trey); // Boss gains the player's loss
                 }
             }
 
@@ -408,7 +442,7 @@ public class Index extends javax.swing.JFrame {
             resultSummary.append("  Total Money: " + player.money + "\n\n");
         }
 
-        // Display the summary in a popup
+        // Display the summary in a popup (without boss's winnings)
         JOptionPane.showMessageDialog(this, resultSummary.toString(), "Game Results", JOptionPane.INFORMATION_MESSAGE);
 
         // Update the display for the current player
@@ -942,31 +976,39 @@ public class Index extends javax.swing.JFrame {
         buttonPrevious.setEnabled(false);
         Calculate();
         MainMoney = Integer.parseInt(txtMoney.getText());
-        
+
         txt1.setText("0");
         txt2.setText("0");
         txt3.setText("0");
         txt4.setText("0");
         txt5.setText("0");
         txt6.setText("0");
-        
+
 //        buttonNext.setEnabled(fsle);
 
     }//GEN-LAST:event_btnStopActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        StringBuilder results = new StringBuilder("Final Results:\n\n");
-        for (Player player : players) {
-            results.append(player.name)
-                    .append(": $")
-                    .append(player.money)
-                    .append("\n");
-        }
+//        StringBuilder results = new StringBuilder("Final Results:\n\n");
+//        for (Player player : players) {
+//            results.append(player.name)
+//                    .append(": $")
+//                    .append(player.money)
+//                    .append("\n");
+//        }
+//
+//        JOptionPane.showMessageDialog(this,
+//                results.toString(),
+//                "Game Results",
+//                JOptionPane.INFORMATION_MESSAGE);
+        StringBuilder bossSummary = new StringBuilder();
+        bossSummary.append("Boss's Final Results:\n");
+        bossSummary.append("  Total Winnings: " + boss.totalWinnings + "\n");
+        bossSummary.append("  Total Losses: " + boss.totalLosses + "\n");
+        bossSummary.append("  Net Result: " + boss.getNetResult() + "\n");
 
-        JOptionPane.showMessageDialog(this,
-                results.toString(),
-                "Game Results",
-                JOptionPane.INFORMATION_MESSAGE);
+        // Display the boss's results in a popup
+        JOptionPane.showMessageDialog(this, bossSummary.toString(), "Boss's Results", JOptionPane.INFORMATION_MESSAGE);
 
         System.exit(0);    }//GEN-LAST:event_btnExitActionPerformed
 
